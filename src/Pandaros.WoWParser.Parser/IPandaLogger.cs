@@ -10,8 +10,8 @@ namespace Pandaros.WoWParser.Parser
         void LogError(Exception e);
         void LogError(Exception e, string message);
         void LogError(Exception e, string message, params object[] args);
-        void AddDamageData(Dictionary<string, string> fightName, List<DamageOutputInfo> damageOutputInfos);
-        void AddHealingData(Dictionary<string, string> fightName, List<HealingOutputInfo> healingOutputInfos);
+        void AddDamageData(List<FightName> fightName, List<DamageOutputInfo> damageOutputInfos);
+        void AddHealingData(List<FightName> fightName, List<HealingOutputInfo> healingOutputInfos);
         void MakeJSON();
     }
 }

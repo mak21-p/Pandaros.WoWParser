@@ -69,7 +69,7 @@ namespace Pandaros.WoWParser.Parser.FightMonitor
                     state.CurrentFight = new MonitoredFight()
                     {
                         BossName = npcName + " ID: " + ExtractHexPortionWithRegex(npcId),
-                        BossPair = new Dictionary<string, string> { { npcName, ExtractHexPortionWithRegex(npcId) } },
+                        BossPair = new List<FightName> { new FightName { ID = ExtractHexPortionWithRegex(npcId), Name = npcName } },
                         FightStart = evnt.Timestamp,
                         MonsterID = new Dictionary<string, bool>() { { npcId, false } }
                     };

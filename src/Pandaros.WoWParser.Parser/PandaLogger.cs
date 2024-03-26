@@ -77,7 +77,7 @@ namespace Pandaros.WoWParser.Parser
         FileStream _stream;
         public List<TJSONData> jSONDatas = new List<TJSONData>();
 
-        public PandaLogger(string logDir)
+        public PandaLogger(string logDir, string outputName = null)
         {
             LOG_DIR = logDir;
 
@@ -87,7 +87,7 @@ namespace Pandaros.WoWParser.Parser
             if (!Directory.Exists(LOG_DIR))
                 Directory.CreateDirectory(LOG_DIR);
 
-            _lOG_NAME = "PandarosLogParser." + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss");
+            _lOG_NAME = outputName ?? "PandarosLogParser." + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss");
 
             LogFile = LOG_DIR + _lOG_NAME + DOT_LOG;
             _stream = new FileStream(LogFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -101,29 +101,29 @@ namespace Pandaros.WoWParser.Parser
                 GetFormattedMessage(message);
         }
 
-        public void AddDamageData(Dictionary<string, string> fightName, List<DamageOutputInfo> damageOutputInfos)
+        public void AddDamageData(List<FightName> fightName, List<DamageOutputInfo> damageOutputInfos)
         {
-            var existingData = jSONDatas.FirstOrDefault(jsonData => jsonData.fightName.EqualsCustom(fightName));
+            var existingData = jSONDatas.FirstOrDefault(jsonData => jsonData.fightNames.EqualsCustom(fightName));
             if (existingData != null)
             {
-                existingData.damageOutputInfos = damageOutputInfos;
+                existingData.damageOutputInfo = damageOutputInfos;
             }
             else
             {
-                jSONDatas.Add(new TJSONData { fightName = fightName, damageOutputInfos = damageOutputInfos, healingOutputInfos = new List<HealingOutputInfo>() });
+                jSONDatas.Add(new TJSONData { fightNames = fightName, damageOutputInfo = damageOutputInfos, healingOutputInfo = new List<HealingOutputInfo>() });
             }
         }
 
-        public void AddHealingData(Dictionary<string, string> fightName, List<HealingOutputInfo> healingOutputInfos)
+        public void AddHealingData(List<FightName> fightName, List<HealingOutputInfo> healingOutputInfos)
         {
-            var existingData = jSONDatas.FirstOrDefault(jsonData => jsonData.fightName.EqualsCustom(fightName));
+            var existingData = jSONDatas.FirstOrDefault(jsonData => jsonData.fightNames.EqualsCustom(fightName));
             if (existingData != null)
             {
-                existingData.healingOutputInfos = healingOutputInfos;
+                existingData.healingOutputInfo = healingOutputInfos;
             }
             else
             {
-                jSONDatas.Add(new TJSONData { fightName = fightName, damageOutputInfos = new List<DamageOutputInfo>(), healingOutputInfos = healingOutputInfos });
+                jSONDatas.Add(new TJSONData { fightNames = fightName, damageOutputInfo = new List<DamageOutputInfo>(), healingOutputInfo = healingOutputInfos });
             }
         }
 

@@ -10,7 +10,7 @@ namespace Pandaros.WoWParser.Parser.FightMonitor
     {
         public Guid Id { get; } = Guid.NewGuid();
         public string BossName { get; set; } 
-        public Dictionary<string, string> BossPair { get; set; } = new Dictionary<string, string>();
+        public List<FightName> BossPair { get; set; } = new List<FightName>();
         public Dictionary<string, bool> MonsterID { get; set; } = new Dictionary<string, bool>();
         public DateTime FightStart { get; set; }
         public DateTime FightEnd { get; set; }
@@ -59,7 +59,7 @@ namespace Pandaros.WoWParser.Parser.FightMonitor
                     if (!BossName.Contains(combatEvent.DestName))
                     { 
                         BossName += ", " + combatEvent.DestName + " ID: " + ExtractHexPortionWithRegex(combatEvent.DestGuid);
-                        BossPair.Add(combatEvent.DestName, ExtractHexPortionWithRegex(combatEvent.DestGuid));
+                        BossPair.Add(new FightName { ID = ExtractHexPortionWithRegex(combatEvent.DestGuid), Name = combatEvent.DestName });
                     }
 
                 } else if (combatEvent.SourceFlags.IsNPC && !MonsterID.ContainsKey(combatEvent.SourceGuid))
@@ -67,7 +67,11 @@ namespace Pandaros.WoWParser.Parser.FightMonitor
                     MonsterID.Add(combatEvent.SourceGuid, false);
 
                     if (!BossName.Contains(combatEvent.SourceName))
+                    {
                         BossName += ", " + combatEvent.SourceName + " ID: " + ExtractHexPortionWithRegex(combatEvent.SourceGuid);
+                        BossPair.Add(new FightName { ID = ExtractHexPortionWithRegex(combatEvent.SourceGuid), Name = combatEvent.SourceName });
+                    }
+                        
                 }
             }
 
